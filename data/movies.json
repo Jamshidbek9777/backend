@@ -1,11 +1,11 @@
 [
      { "id": 1, "name": "Resident evil", "year": 1998, "duration": 120 },
-     { "id": 2, "name": "Home alone", "year": 2005, "duration": 250 },
-     { "id": 3, "name": "New movie", "year": 2024, "duration": 20 },
+     { "id": 3, "name": "New ", "year": 2024, "duration": 20 },
      { "id": 4, "name": "Jamshidbek", "year": 2004, "duration": 80 },
-     { "id": 5, "name": "Jamshidbek", "year": 2004, "duration": 80 },
-     { "id": 6, "name": "Jamshidbek", "year": 2004, "duration": 80 },
+     { "id": 5, "name": "kk", "year": 2004, "duration": 80 },
+     { "id": 6, "name": "jj", "year": 2004, "duration": 80 },
      { "id": 7, "name": "Otabek", "year": 2005, "duration": 55450 },
-     { "id": 8, "name": "Otash", "year": 2005, "duration": 55450 }
+     { "id": 8, "name": "Otash", "year": 2005, "duration": 55450 },
+     { "id": 9, "name": "Otash2", "year": 2005, "duration": 55450 },
+     { "id": 10, "name": "Otash2", "year": 2005, "duration": 55450 }
 ]
- 
