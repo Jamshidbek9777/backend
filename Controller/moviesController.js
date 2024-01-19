@@ -1,79 +1,96 @@
-const fs = require("fs");
 const Movie = require("./../Models/moviesModel");
 //Route handler functions
-let movies = JSON.parse(fs.readFileSync("./data/movies.json"));
 
-exports.getAllMovies = (req, res) => {
-     res.status(200).json({
-          status: "succes",
-          data: {
-               movies: movies,
-          },
-     });
+exports.getAllMovies = async (req, res) => {
+     try {
+          const excludeFields = ["sort", "page", "limit", "fields"];
+          const queryObj = { ...req.query };
+          excludeFields.forEach((el) => {
+               delete queryObj[el];
+          });
+          console.log(req.query);
+          console.log(queryObj);
+          const movies = await Movie.find(queryObj);
+          res.status(200).json({
+               status: "succes",
+               length: movies.length,
+               data: {
+                    movies: movies,
+               },
+          });
+     } catch (err) {
+          res.status(404).json({
+               status: "fail",
+               message: err.message,
+          });
+     }
 };
-exports.getMovie = (req, res) => {
-     const newId = movies[movies.length - 1].id + 1;
-     const newMovie = Object.assign({ id: newId }, req.body);
-     movies.push(newMovie);
-     fs.writeFile("./data/movies.json", JSON.stringify(movies), (err) => {
+exports.createMovie = async (req, res) => {
+     try {
+          const movie = await Movie.create(req.body);
           res.status(201).json({
                status: "succes",
                data: {
-                    movie: newMovie,
+                    movie: movie,
                },
           });
-     });
+     } catch (err) {
+          res.status(400).json({
+               status: "fail",
+               message: err.message,
+          });
+     }
 };
-exports.getMovieWithId = (req, res) => {
-     const id = req.params.id * 1;
-     let movie = movies.find((el) => {
-          return el.id == id;
-     });
-     res.status(200).json({
-          status: "succes",
-          data: {
-               movie: movie,
-          },
-     });
-};
-exports.updateMovie = (req, res) => {
-     const id = req.params.id * 1;
-     let movieUpdate = movies.find((el) => {
-          return el.id == id;
-     });
-     let index = movies.indexOf(movieUpdate);
-     Object.assign(movieUpdate, req.body);
-     movies[index] = movieUpdate;
-     fs.writeFile("./data/movies.json", JSON.stringify(movies), (err) => {
+exports.getMovieWithId = async (req, res) => {
+     try {
+          const movie = await Movie.findById(req.params.id);
           res.status(200).json({
                status: "succes",
                data: {
-                    movie: movieUpdate,
+                    movie,
                },
           });
-     });
-};
-exports.deleteMovie = (req, res) => {
-     const deleteId = req.params.id * 1;
-
-     let choosenMovie = movies.find((el) => {
-          return el.id === deleteId;
-     });
-     if (!choosenMovie) {
-          return res.status(404).json({
+     } catch (err) {
+          res.status(404).json({
                status: "fail",
-               message: "No movie found with" + deleteId + "id",
+               message: err.message,
           });
      }
-
-     const index = movies.indexOf(choosenMovie);
-     movies.splice(index, 1);
-     fs.writeFile("./data/movies.json", JSON.stringify(movies), (err) => {
-          res.status(204).json({
+};
+exports.updateMovie = async (req, res) => {
+     try {
+          const updatedMovie = await Movie.findByIdAndUpdate(
+               req.params.id,
+               req.body,
+               {
+                    new: true,
+                    runValidators: true,
+               }
+          );
+          res.status(200).json({
                status: "succes",
                data: {
-                    movie: null,
+                    movie: updatedMovie,
                },
           });
-     });
+     } catch (err) {
+          res.status(404).json({
+               status: "fail",
+               message: err.message,
+          });
+     }
+};
+exports.deleteMovie = async (req, res) => {
+     try {
+          const deleteMovie = await Movie.findByIdAndDelete(req.params.id);
+          res.status(204).json({
+               status: "succes",
+               data: null,
+          });
+     } catch (err) {
+          res.status(404).json({
+               status: "fail",
+               message: err.message,
+          });
+     }
 };
