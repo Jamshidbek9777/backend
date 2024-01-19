@@ -5,7 +5,13 @@ dotenv.config({ path: "./config.env" });
 const app = require("./index");
 const cors = require("cors");
 
-app.use(cors());
+app.use(
+     cors({
+          origin: "http://locahost:3000",
+          methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+          credentials: true,
+     })
+);
 // console.log(process.env);
 mongoose.connect(process.env.CONN_STR, {}).then((conn) => {
      // console.log(conn);
