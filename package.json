@@ -4,7 +4,8 @@
      "description": "Learning express js with node js",
      "main": "index.js",
      "scripts": {
-          "start": "npx nodemon server.js"
+          "start": "npx node server.js",
+          "dev": "npx nodemon server.js"
      },
      "author": "Jamshidbek",
      "license": "ISC",

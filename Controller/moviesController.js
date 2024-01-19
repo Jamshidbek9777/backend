@@ -1,6 +1,4 @@
 const Movie = require("./../Models/moviesModel");
-//Route handler functions
-
 exports.getAllMovies = async (req, res) => {
      try {
           const excludeFields = ["sort", "page", "limit", "fields"];
@@ -8,9 +6,14 @@ exports.getAllMovies = async (req, res) => {
           excludeFields.forEach((el) => {
                delete queryObj[el];
           });
-          console.log(req.query);
-          console.log(queryObj);
-          const movies = await Movie.find(queryObj);
+          // console.log(req.query);
+          // console.log(queryObj);
+
+          let query =  Movie.find(queryObj);
+          if (req.query.sort) {
+               query = query.sort(req.query.sort);
+          }
+          const movies = await query;
           res.status(200).json({
                status: "succes",
                length: movies.length,
